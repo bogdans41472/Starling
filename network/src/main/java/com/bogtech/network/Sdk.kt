@@ -1,14 +1,24 @@
 package com.bogtech.network
 
 import com.bogtech.network.account.model.Account
+import com.bogtech.network.account.model.AccountsList
+import com.bogtech.network.feed.model.FeedItemList
+import io.reactivex.Single
+import io.reactivex.annotations.NonNull
 
 interface Sdk {
 
-    fun getAccounts(): List<Account>
+    fun getAccountsList(): Single<AccountsList>
 
-//    fun getTransactionFeed(): List<Something>
+    fun getTransactionFeed(
+        @NonNull accountUid: String,
+        @NonNull category: String
+    )
+            : Single<FeedItemList>
 
-    fun getSavingsGoals()
+    fun getSavingsGoals(
+
+    )
 
     companion object {
         private var testInstance: Sdk? = null

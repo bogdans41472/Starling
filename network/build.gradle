@@ -13,9 +13,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
-        buildConfigField "String", "CLIENT_ID", "svS1exuztFJdCVvmlAcI"
-        buildConfigField "String", "CLIENT_SECRET", "b0H2BkIDv5N5SmAAwVHzJSaWiGoMeBxisL2JqO0y"
-        buildConfigField "String", "BASE_URL", "https://api-sandbox.starlingbank.com"
+        buildConfigField "String", "CLIENT_ID", "\"svS1exuztFJdCVvmlAcI\""
+        buildConfigField "String", "CLIENT_SECRET", "\"eyJhbGciOiJQUzI1NiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_31Sy5LbIBD8lZTOO1t6W9Itt_xAPmAEg00ZgQrQbrZS-fdggSzLceVGd8-rh_mdSeeyIcNZAqfJvDuPVkl9HlFf35mZsrfMLWOIECNVBfUF8LJiULNTB2PT5lC2gokqrwusRQimX3M2FG3V9qeiapu3TKKPRNfV_Y1Axsyi_Q-jONmfkofabd20VJQNYN6OUOen8OqbAtrxNLKuYwUv2lDbmyvpmFF3eZc3ooQyb3Ko-76FMS8Z5G1Ffct6LooyZARb3xkj52JWWfH6VGEPjShE6FMhjKI9QV0Xeck7KquiuRlmZqbbUuKkwJRxxAdLyL9t3GUdHzRO9FLwX_OTIDlpL4Uke-SVdP7AJMC5DYMPxKW_g6h4j-wy0T1yx59WevqGi78YK134RpCayw_JF1QxeESFmqXRGFoOzGhvjYqNbkzSjBbSTuil0WAEiEVzd5fcvfsGYmu2OG-mzSJNKFNhRWEQfR5wntXXHa1RE2qOngZOikKJDSbNXsnfjMyWBFkKs7v_SXGMqM0KGYUNeDrb1cdj4r9iSiXLLri5m8hjmAYHFuCqJryamvGLaJMiSCYi2INATnhOnqK2P8Fb1A7ZPmGgYVzUddh-knZq7xbx3jDircDtHsJtTdLvNZVh4Q4eKqwEmNtBPLMpyxoh1TZ-9HOg1ihLjOTsD8Adpbhchx_hwxyczT7HgUtuDtxa55GJCwtf_qrELr6otYuxKLsQXxRxSAtLNHkfDC5zgh7XawVj-UPPI7s1O7Iv8sF86jvvaf0m5j6eqZmLRC2jYzas8HYdW5dHbo16PKH1l55vKvvzFz9JwXnrBQAA.zyZ8HuhB12xxyNqXl653F56oRj8Wty6_oBL6xFaMVCQu8lr5IZY4Adn-ldnFyNEBF1ogRDAa3dXs3y4LBnngFxL27ZCDnponFIVpl11DhTWwJSVI8w0RioU40PCAiF66OeDJ9C4tt7nkXP2xtC-f9hwHc5yUTcbJkslbedfunJKtzn47UL-DblNR9Z01ScCcPSb9O_1KPsFnZNSAnr1Xg1P_5vqt0RTOxouZRbCtnHAz8n9wz2nl_nuipkJ-KVkoeNiH4V7XNC2RYM5pTgyRals4hqtI5fxIfVA9hgUbAvkibf00abF9jw0XWomZ2stSpZ35Xus5aCrbgRqIRxHozcJLt7UbbrIK7Q7saR7AandJifv_iIkIBzT4Qya1D82uiyohNH4__rVk8-XCdQhHvry3CJbkIuRl8DV1CTbZhjs50uQ1gdwitEq0RcwIB1h5YLtlRb1WfjtcW2ZdfsWWOg1N1_JgAXTlmIZEJ2BGeNSZErFxe-8LptNHeECI3GW62tKogSxtLHRkwxdqxbF3RgqVEVScYnuXO1IGnPgT2YybAIncnAMtJFIk1l0RKfuoxs1fi2egNI3IlRA6J9ZlymX35etHDUDk_QsEJDmkUEOkHvFIiG4LdjONRr592qsi1GASydK5QT_u1TVSHsYl3K2kGjovzasdXCr5oi29FXI\""
+        buildConfigField "String", "BASE_URL", "\"https://api-sandbox.starlingbank.com/api/v2/\""
     }
 
     buildTypes {
@@ -41,10 +41,13 @@ dependencies {
     api 'io.reactivex.rxjava2:rxjava:2.2.8'
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     api 'com.squareup.retrofit2:retrofit:2.5.0'
-    api 'com.squareup.retrofit2:converter-gson:2.1.0'
     api 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.okhttp:okhttp:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:3.9.0'
