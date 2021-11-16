@@ -3,15 +3,21 @@ package com.bogtech.network.feed.service
 import com.bogtech.network.feed.model.FeedItemList
 import com.bogtech.network.network.ApiManager
 import io.reactivex.Single
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface RemoteFeedApi {
 
-    @GET("feed/account/{accountUid}/category/{categoryUid}")
+    @GET("feed/account/{accountUid}/category/{categoryUid}/transactions-between")
     @Headers("Authorization: Bearer ${ApiManager.token}")
-    fun getAccountLists(
+    fun getFeedItems(
         @Path("accountUid") accountUid: String,
         @Path("categoryUid") categoryUid: String,
-        @Query("changesSince") timestamp: String = "2021-01-01T12:34:56.000Z"
+        @Query("minTransactionTimestamp") minTransactionTimestamp: String,
+        @Query("maxTransactionTimestamp") maxTransactionTimestamp: String,
     ): Single<FeedItemList>
+
+    // TODO implement changesSince
 }

@@ -1,12 +1,9 @@
 package com.bogtech.network.network
 
 import com.bogtech.network.BuildConfig
-import com.bogtech.network.account.model.AccountsList
-import com.bogtech.network.account.service.RemoteAccountApi
-import com.bogtech.network.feed.model.FeedItemList
+import com.bogtech.network.account.AccountsDao
+import com.bogtech.network.feed.FeedDao
 import com.bogtech.network.feed.service.RemoteFeedApi
-import com.bogtech.network.util.DefaultRxSchedulers
-import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -17,8 +14,6 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Main access point for remote or local instances of API services.
  */
 class ApiManager {
-
-    private var rxSchedulers: DefaultRxSchedulers = DefaultRxSchedulers()
 
     // Get retrofit with converterFactory and OkHttpClient.
     private fun getRetrofit(): Retrofit {
@@ -34,20 +29,12 @@ class ApiManager {
      * Returns Accounts Data Access Object with default observeOn UI Thread and subscribeOn IO Thread
      * to allow host app to update UI directly without getting exception that a background thread is trying to update the UI.
      */
-    fun getAccountsDao(): Single<AccountsList> {
-        return getRetrofit().create(RemoteAccountApi::class.java).getAccountLists()
-            .observeOn(rxSchedulers.ui())
-            .subscribeOn(rxSchedulers.io())
+    fun getAccountsDao(): AccountsDao {
+        return AccountsDao(getRetrofit())
     }
 
-    fun getFeedDao(
-        accountUid: String,
-        categoryUid: String,
-        timestamp: String?
-    ): Single<FeedItemList> {
-        return getRetrofit().create(RemoteFeedApi::class.java).getAccountLists(accountUid, categoryUid)
-            .observeOn(rxSchedulers.ui())
-            .subscribeOn(rxSchedulers.io())
+    fun getFeedDao(): FeedDao {
+        return FeedDao(getRetrofit())
     }
 
     private var okHttpClient = OkHttpClient.Builder()

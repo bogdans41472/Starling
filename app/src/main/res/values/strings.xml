@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Starling Code Challenge</string>
+    <string name="text_static_roundup_total">Roundup Total</string>
+    <string name="transfer">Transfer</string>
 </resources>
