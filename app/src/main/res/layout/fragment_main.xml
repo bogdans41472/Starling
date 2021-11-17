@@ -16,6 +16,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/loadingSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="@dimen/margin_24dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            style="?android:attr/progressBarStyleLarge"/>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/roundup_static"
             android:layout_width="wrap_content"

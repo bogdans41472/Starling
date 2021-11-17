@@ -3,34 +3,51 @@ package com.bogtech.network
 import com.bogtech.network.account.model.AccountsList
 import com.bogtech.network.feed.model.FeedItemList
 import com.bogtech.network.feed.model.subtypes.Amount
+import com.bogtech.network.savings.model.*
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.annotations.NonNull
 
 interface Sdk {
 
     /**
-     * Returns a Single that contains a list of all accounts associated with user.
+     * Returns a list of all accounts associated with user.
      */
     fun getAccountsList(): Single<AccountsList>
 
     /**
-     * Returns list of all transactions executed on the account in the given timeframe
+     * Returns list of all transactions executed on the account in the given timeframe.
      */
     fun getTransactionFeed(
         accountUid: String,
         category: String,
         minTimestamp: String,
         maxTimestamp: String
-    ) : Single<FeedItemList>
+    ): Single<FeedItemList>
 
-    fun getRoundUpBetweenTimestamps(
-        minTimestamp: String,
-        maxTimestamp: String
-    ) : Single<Amount>
+    /**
+     * Retrieves Amount of last week transactions.
+     */
+    fun getRoundUpForLastWeek(): Single<Amount>
 
-    fun getSavingsGoals(
+    /**
+     * Create a new savings goal
+     */
+    fun createSavingsGoal(savingsGoals: SavingsGoals): Single<SavingsGoalResponse>
 
-    )
+    /**
+     *
+     */
+    fun getSavingsGoals(): Single<SavingsGoalsList>
+
+    /**
+     * Adds money to savings account
+     */
+    fun addMoneyToSavings(
+        savingsGoalUid: String,
+        transferUid: String,
+        amount: SavingsGoalsAmount
+    ): Single<TransferResponse>
 
     companion object {
         private var testInstance: Sdk? = null

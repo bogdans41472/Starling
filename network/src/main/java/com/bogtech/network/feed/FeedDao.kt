@@ -24,6 +24,10 @@ class FeedDao(
             .onErrorResumeNext(this::handleError)
     }
 
+    fun getRemoteFeedApi(): RemoteFeedApi {
+        return retrofit.create(RemoteFeedApi::class.java)
+    }
+
     private fun handleError(throwable: Throwable): Single<FeedItemList> {
         if (throwable is IOException || throwable is UnknownHostException) {
             return Single.error(

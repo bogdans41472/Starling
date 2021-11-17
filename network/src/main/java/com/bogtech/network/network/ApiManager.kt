@@ -4,6 +4,7 @@ import com.bogtech.network.BuildConfig
 import com.bogtech.network.account.AccountsDao
 import com.bogtech.network.feed.FeedDao
 import com.bogtech.network.feed.service.RemoteFeedApi
+import com.bogtech.network.savings.SavingsDao
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -35,6 +36,10 @@ class ApiManager {
 
     fun getFeedDao(): FeedDao {
         return FeedDao(getRetrofit())
+    }
+
+    fun getSavingsDao(): SavingsDao {
+        return SavingsDao(getRetrofit())
     }
 
     private var okHttpClient = OkHttpClient.Builder()

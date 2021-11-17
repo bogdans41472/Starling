@@ -19,5 +19,11 @@ interface RemoteFeedApi {
         @Query("maxTransactionTimestamp") maxTransactionTimestamp: String,
     ): Single<FeedItemList>
 
-    // TODO implement changesSince
+    @GET("feed/account/{accountUid}/category/{categoryUid}")
+    @Headers("Authorization: Bearer ${ApiManager.token}")
+    fun getChangesSinceItems(
+        @Path("accountUid") accountUid: String,
+        @Path("categoryUid") categoryUid: String,
+        @Query("changesSince") timestamp: String
+    ): Single<FeedItemList>
 }
