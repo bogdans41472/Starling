@@ -9,7 +9,7 @@ import retrofit2.Retrofit
 /**
  * AccountsDao is responsible for making /account calls via RemoteAccountApi retrofit.
  */
-class AccountsDao(
+open class AccountsDao(
     private val retrofit: Retrofit
 ) : BaseDao() {
 

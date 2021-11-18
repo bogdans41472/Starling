@@ -9,17 +9,19 @@ import com.bogtech.network.feed.model.subtypes.Amount
 import com.bogtech.network.network.ApiManager
 import com.bogtech.network.savings.model.*
 import io.reactivex.Single
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import kotlin.math.ceil
 
 class SdkImpl : Sdk {
 
-    @VisibleForTesting
-    val apiManager: ApiManager = ApiManager()
+    lateinit var apiManager: ApiManager
 
     fun initializeWithContext(context: Context) {
-        // Currently unused, but may become useful later on when more functionality is added
-        // This method will get called prior to host application's App.class,
-        // so we can setup prerequisites for the correct functioning of this library
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .build()
+        apiManager = ApiManager(okHttpClient)
     }
 
     override fun getAccountsList(): Single<AccountsList> {
@@ -86,7 +88,8 @@ class SdkImpl : Sdk {
         }
     }
 
-    private fun getMainAccount(accountsList: AccountsList): Account {
+    @VisibleForTesting
+    fun getMainAccount(accountsList: AccountsList): Account {
         return accountsList.accounts[0]
     }
 

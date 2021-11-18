@@ -1,5 +1,6 @@
 package com.bogtech.starling.ui.viewmodel
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -11,26 +12,22 @@ import com.bogtech.network.savings.model.SavingsGoals
 import com.bogtech.network.savings.model.SavingsGoalsAmount
 import com.bogtech.network.savings.model.SavingsTarget
 import com.bogtech.network.savings.model.TransferResponse
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class MainFragmentViewModel : ViewModel(), DefaultLifecycleObserver {
+class MainFragmentViewModel(val sdk: Sdk) : ViewModel(), DefaultLifecycleObserver {
 
     val totalRoundUpAmountLiveData: MutableLiveData<Amount> = MutableLiveData()
     val transferState: MutableLiveData<TransferResponse> = MutableLiveData()
     val loadingProcess: MutableLiveData<Boolean> = MutableLiveData()
     val errorLiveData: MutableLiveData<InternalException> = MutableLiveData()
 
-    private lateinit var sdk: Sdk
-    private lateinit var compositeDisposable: CompositeDisposable
+    @VisibleForTesting
+    lateinit var compositeDisposable: CompositeDisposable
 
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
-        sdk = Sdk.getInstance()
         compositeDisposable = CompositeDisposable()
-        refreshRoundUpTotal()
     }
 
     override fun onStop(owner: LifecycleOwner) {
@@ -41,7 +38,7 @@ class MainFragmentViewModel : ViewModel(), DefaultLifecycleObserver {
     /**
      * Calls into SDK to retrieve the roundUp total for last week
      */
-    private fun refreshRoundUpTotal() {
+    fun refreshRoundUpTotal() {
         compositeDisposable.add(
             sdk.getRoundUpForLastWeek()
                 .doOnSubscribe{ loadingProcess.postValue(true) }

@@ -90,6 +90,7 @@ class MainFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         fragmentViewModel.onStart(this)
+        fragmentViewModel.refreshRoundUpTotal()
     }
 
     override fun onStop() {
