@@ -1,43 +1,24 @@
 package com.bogtech.network.feed
 
-import com.bogtech.network.exception.InternalError
-import com.bogtech.network.exception.InternalException
 import com.bogtech.network.feed.model.FeedItemList
 import com.bogtech.network.feed.service.RemoteFeedApi
+import com.bogtech.network.network.BaseDao
 import io.reactivex.Single
 import retrofit2.Retrofit
-import java.io.IOException
-import java.net.UnknownHostException
 
+/**
+ * FeedDao is responsible for making /feed calls via RemoteFeedApi retrofit.
+ */
 class FeedDao(
     private val retrofit: Retrofit
-) {
+) : BaseDao() {
 
-    fun getRemoteFeed(
+    fun getChangesSinceItems(
         accountUid: String,
-        categoryUid: String,
-        minTimestamp: String,
-        maxTimestamp: String
+        defaultCategory: String,
+        timestamp: String
     ): Single<FeedItemList> {
-        return retrofit.create(RemoteFeedApi::class.java)
-            .getFeedItems(accountUid, categoryUid, minTimestamp, maxTimestamp)
-            .onErrorResumeNext(this::handleError)
-    }
-
-    fun getRemoteFeedApi(): RemoteFeedApi {
-        return retrofit.create(RemoteFeedApi::class.java)
-    }
-
-    private fun handleError(throwable: Throwable): Single<FeedItemList> {
-        if (throwable is IOException || throwable is UnknownHostException) {
-            return Single.error(
-                InternalException(
-                    InternalError.NETWORK_ERROR,
-                    "There was a problem with your connection, please check your connection"
-                )
-            )
-        }
-
-        return Single.error(throwable)
+        return getDefaultSingle(retrofit.create(RemoteFeedApi::class.java)
+            .getChangesSinceItems(accountUid, defaultCategory, timestamp))
     }
 }

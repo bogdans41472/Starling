@@ -7,7 +7,7 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Schedulers used for observing and subscribing on.
  */
-class DefaultRxSchedulers : RxSchedulers {
+open class DefaultRxSchedulers : RxSchedulers {
     override fun ui(): Scheduler {
         return AndroidSchedulers.mainThread()
     }

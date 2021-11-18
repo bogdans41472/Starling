@@ -16,16 +16,6 @@ interface Sdk {
     fun getAccountsList(): Single<AccountsList>
 
     /**
-     * Returns list of all transactions executed on the account in the given timeframe.
-     */
-    fun getTransactionFeed(
-        accountUid: String,
-        category: String,
-        minTimestamp: String,
-        maxTimestamp: String
-    ): Single<FeedItemList>
-
-    /**
      * Retrieves Amount of last week transactions.
      */
     fun getRoundUpForLastWeek(): Single<Amount>
@@ -34,11 +24,6 @@ interface Sdk {
      * Create a new savings goal
      */
     fun createSavingsGoal(savingsGoals: SavingsGoals): Single<SavingsGoalResponse>
-
-    /**
-     *
-     */
-    fun getSavingsGoals(): Single<SavingsGoalsList>
 
     /**
      * Adds money to savings account

@@ -8,30 +8,23 @@ import com.bogtech.network.feed.model.FeedItemList
 import com.bogtech.network.feed.model.subtypes.Amount
 import com.bogtech.network.network.ApiManager
 import com.bogtech.network.savings.model.*
-import com.bogtech.network.util.DefaultRxSchedulers
-import io.reactivex.Completable
 import io.reactivex.Single
-import java.util.*
 import kotlin.math.ceil
-import kotlin.math.roundToLong
 
 class SdkImpl : Sdk {
 
     @VisibleForTesting
     val apiManager: ApiManager = ApiManager()
 
-    @VisibleForTesting
-    val rxSchedulers: DefaultRxSchedulers = DefaultRxSchedulers()
-
     fun initializeWithContext(context: Context) {
-        // Setup prequisites
+        // Currently unused, but may become useful later on when more functionality is added
+        // This method will get called prior to host application's App.class,
+        // so we can setup prerequisites for the correct functioning of this library
     }
 
     override fun getAccountsList(): Single<AccountsList> {
         return apiManager.getAccountsDao()
             .getAccountsList()
-            .observeOn(rxSchedulers.ui())
-            .subscribeOn(rxSchedulers.io())
     }
 
     private fun getMainAccount(): Single<Account> {
@@ -39,28 +32,14 @@ class SdkImpl : Sdk {
             .map(::getMainAccount)
     }
 
-    override fun getTransactionFeed(
-        accountUid: String,
-        category: String,
-        minTimestamp: String,
-        maxTimestamp: String
-    ): Single<FeedItemList> {
-        return apiManager.getFeedDao()
-            .getRemoteFeed(accountUid, category, minTimestamp, maxTimestamp)
-            .observeOn(rxSchedulers.ui())
-            .subscribeOn(rxSchedulers.io())
-    }
-
     override fun getRoundUpForLastWeek(): Single<Amount> {
         return getMainAccount()
             .flatMap { mainAccount ->
-                apiManager.getFeedDao().getRemoteFeedApi().getChangesSinceItems(
+                apiManager.getFeedDao().getChangesSinceItems(
                     mainAccount.accountUid,
                     mainAccount.defaultCategory,
                     "2021-11-07T12:34:56.000Z"
                 )
-                    .subscribeOn(rxSchedulers.io())
-                    .observeOn(rxSchedulers.ui())
             }
             .flatMap { activityFeed ->
                 calculateRoundupTotal(activityFeed)
@@ -70,6 +49,9 @@ class SdkImpl : Sdk {
     private fun calculateRoundupTotal(activityFeed: FeedItemList): Single<Amount> {
         var roundUpAmountTotal = 0.0
         for (activity in activityFeed.feedItems) {
+            // I'm not sure if this is correct.
+            // Are we expecting to account for decimal points?
+            // minorUnits are supposed to be pence?
             val minorUnits = activity.amount.minorUnits.toDouble() / 100
             val roundedAmount = ceil(minorUnits)
             roundUpAmountTotal += roundedAmount - minorUnits
@@ -82,35 +64,25 @@ class SdkImpl : Sdk {
         )
     }
 
-    override fun getSavingsGoals(): Single<SavingsGoalsList> {
-        return getMainAccount().flatMap { account ->
-            apiManager.getSavingsDao().getRemoteSavingsApi()
-                .getSavingsGoals(account.accountUid)
-                .subscribeOn(rxSchedulers.io())
-        }
-    }
-
     override fun addMoneyToSavings(
         savingsGoalUid: String,
         transferUid: String,
         amount: SavingsGoalsAmount
     ): Single<TransferResponse> {
         return getMainAccount().flatMap { account ->
-            apiManager.getSavingsDao().getRemoteSavingsApi()
-                .addMoneyToSavingsGoals(
-                    account.accountUid,
-                    savingsGoalUid,
-                    transferUid,
-                    amount
-                ).subscribeOn(rxSchedulers.io())
+            apiManager.getSavingsDao().addMoneyToSavingsGoals(
+                account.accountUid,
+                savingsGoalUid,
+                transferUid,
+                amount
+            )
         }
     }
 
     override fun createSavingsGoal(savingsGoals: SavingsGoals): Single<SavingsGoalResponse> {
         return getMainAccount().flatMap { account ->
-            apiManager.getSavingsDao().getRemoteSavingsApi()
+            apiManager.getSavingsDao()
                 .createSavingsGoals(account.accountUid, savingsGoals)
-                .subscribeOn(rxSchedulers.io())
         }
     }
 

@@ -3,7 +3,6 @@ package com.bogtech.network.network
 import com.bogtech.network.BuildConfig
 import com.bogtech.network.account.AccountsDao
 import com.bogtech.network.feed.FeedDao
-import com.bogtech.network.feed.service.RemoteFeedApi
 import com.bogtech.network.savings.SavingsDao
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -38,6 +38,9 @@ class MainFragmentViewModel : ViewModel(), DefaultLifecycleObserver {
         compositeDisposable.dispose()
     }
 
+    /**
+     * Calls into SDK to retrieve the roundUp total for last week
+     */
     private fun refreshRoundUpTotal() {
         compositeDisposable.add(
             sdk.getRoundUpForLastWeek()
@@ -61,9 +64,9 @@ class MainFragmentViewModel : ViewModel(), DefaultLifecycleObserver {
                     sdk.addMoneyToSavings(
                         savingsGoalsResponse.savingsGoalUid,
                         UUID.randomUUID().toString(),
-                        SavingsGoalsAmount(
-                            sdk.getRoundUpForLastWeek().blockingGet()
-                        )
+                        // Ideally this amount would be retrieved from somewhere
+                        // instead of being hardcoded
+                        SavingsGoalsAmount(Amount("GBP", 1033L))
                     )}
                 .subscribe({ response ->
                     transferState.postValue(response)
